@@ -17,7 +17,7 @@ app.get('/', async (req, res) => {
   try {
     // let searchQuery = req.query + process.env.DB_ACCESS_KEY;
 
-    let searchQuery = req.query;
+    let searchQuery = 'nigeria';
     const search = await unsplash.search.getPhotos({
       query: searchQuery,
       page: 1,
