@@ -15,9 +15,9 @@ const unsplash = createApi({
 // a get request route to get the photos from unsplash
 app.get('/', async (req, res) => {
   try {
-    // let searchQuery = req.query + process.env.DB_ACCESS_KEY;
+    let searchQuery = req.originalUrl
 
-    let searchQuery = 'nigeria';
+    // let searchQuery = 'nigeria';
     const search = await unsplash.search.getPhotos({
       query: searchQuery,
       page: 1,
