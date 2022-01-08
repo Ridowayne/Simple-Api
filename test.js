@@ -1,6 +1,7 @@
 const express = require('express');
+const dotenv = require('dotenv');
 const nodeFetch = require('node-fetch');
-require('dotenv').config({ path: './config.env' });
+dotenv.config({ path: './config.env' });
 
 const app = express();
 
@@ -15,7 +16,7 @@ const unsplash = createApi({
 // a get request route to get the photos from unsplash
 app.get('/', async (req, res) => {
   try {
-    let searchQuery = req.originalUrl
+    let searchQuery = req.originalUrl;
 
     // let searchQuery = 'nigeria';
     const search = await unsplash.search.getPhotos({
@@ -23,6 +24,7 @@ app.get('/', async (req, res) => {
       page: 1,
       perPage: 10,
     });
+    // .then((res) => console.log(res.response.results));
     res.status(200).json({
       status: 'succes',
       data: {
