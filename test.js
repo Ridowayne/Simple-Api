@@ -1,11 +1,34 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const nodeFetch = require('node-fetch');
+
 dotenv.config({ path: './config.env' });
 
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 const { createApi } = require('unsplash-js');
+
+const Photo = require('./models/photoModels');
+
+// Defining the database with the authoraization password
+const DB = process.env.MONGODB.replace(
+  '<password>',
+  process.env.MONGODB_PASSWORD
+);
+
+// connecting the to the database
+mongoose
+  .connect(DB, {
+    // useNewUrlParser: true,
+    // useCreateIndex: true,
+    // useFindAndModify: false,
+  })
+  .then(() => console.log('Api connected to the Database sucessfully'));
 
 // setting up the unsplash-api
 const unsplash = createApi({
@@ -29,6 +52,23 @@ app.get('/', async (req, res) => {
       status: 'succes',
       data: {
         search,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(404).send('Unable to get requested route');
+  }
+});
+
+app.post('/', async (req, res) => {
+  console.log('%%%%%%%%%%%%%%%%%%%%%' + req.body);
+  try {
+    const firstPhoto = await Photo.create(req.body);
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        Photo: firstPhoto,
       },
     });
   } catch (error) {
